@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal Cuántico</title>
+  <style>
+    body {
+      background-color: #0b0821;
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .box {
+      background: #1e1530;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 15px #5b3b98;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      width: 90%;
+    }
+    input {
+      background: #eee;
+      text-transform: uppercase;
+    }
+    button {
+      background: #9d4dff;
+      color: white;
+      cursor: pointer;
+    }
+    .code {
+      background: #16101f;
+      border: 1px dashed #00cfff;
+      padding: 10px;
+      margin-top: 20px;
+      color: #00cfff;
+      font-size: 18px;
+    }
+    .hidden {
+      display: none;
+    }
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .action-buttons button {
+      width: auto;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box" id="formBox">
+  <h2>Bienvenide al Portal Cuántico</h2>
+  <p>¿Estás listx para recordar quién eres realmente?</p>
+  <input type="text" id="nombre" placeholder="Nombre completo (mínimo 3 palabras)" required />
+  <input type="date" id="fecha" required />
+  <input type="text" id="codigo" placeholder="Ingresa tu código de desbloqueo" required />
+  <button id="activarBtn">ACTIVAR</button>
+  <p id="mensaje" style="color: lime;"></p>
+</div>
+
+<div class="box hidden" id="resultadoBox">
+  <h3>¡Código Cuántico Desbloqueado!</h3>
+  <div class="code" id="codigoResultado"></div>
+  <p>
+    Este es tu código de desbloqueo mental.<br>
+    Escríbelo en la palma de tu mano izquierda con intención consciente.<br>
+    Actívalo con agua o luz solar durante 11 segundos.<br>
+    Este código iniciará la desprogramación de la M4TR1X y activará tus superpoderes latentes.<br><br>
+    Este es el primer paso. Bienvenide al juego sagrado.
+  </p>
+  <div class="action-buttons">
+    <a href="https://wa.me/593000000000?text=Hola!+Ya+tengo+mi+codigo+cuantico+🌀" target="_blank">
+      <button style="background:#25d366;">Contactar un guía</button>
+    </a>
+    <button onclick="reiniciarFormulario()" style="background:#444;">Activar otro código cuántico</button>
+  </div>
+</div>
+
+<script>
+function esNumeroMaestro(num) {
+  return [11, 22, 33, 44, 55, 66, 77, 88, 99].includes(num);
+}
+
+function reducir(num) {
+  if (esNumeroMaestro(num)) return num;
+  let suma = [...num.toString()].reduce((a, b) => a + parseInt(b), 0);
+  return esNumeroMaestro(suma) ? suma : (suma >= 10 ? reducir(suma) : suma);
+}
+
+function guardarEnGoogleSheets(nombre, fecha, codigoIngreso, codigoGenerado) {
+  fetch("https://script.google.com/macros/s/AKfycbzwQb9XSkeJV4T5yOeELMJsreEX42HpQY0OgDgnmflHDbHj0thML5z06HcV3DeYWnyrDQ/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      nombre: nombre,
+      fecha: fecha,
+      codigoIngreso: codigoIngreso,
+      codigoGenerado: codigoGenerado
+    })
+  })
+  .then(response => {
+    console.log("Datos enviados a Google Sheets");
+  })
+  .catch(error => {
+    console.error("Error al enviar datos:", error);
+  });
+}
+
+document.getElementById("activarBtn").addEventListener("click", function() {
+  const nombre = document.getElementById('nombre').value.trim().toUpperCase();
+  const fecha = document.getElementById('fecha').value;
+  const codigo = document.getElementById('codigo').value.trim().toUpperCase();
+  const mensaje = document.getElementById('mensaje');
+
+  if (nombre.split(' ').length < 3) {
+    mensaje.textContent = "Por favor ingresa mínimo un nombre y dos apellidos.";
+    return;
+  }
+
+  if (!fecha || !codigo) {
+    mensaje.textContent = "Completa todos los campos.";
+    return;
+  }
+
+  if (codigo === "Q0") {
+    const [anio, mes, dia] = fecha.split("-").map(x => parseInt(x));
+
+    const diaVal = esNumeroMaestro(dia) ? dia : reducir(dia);
+    const mesVal = esNumeroMaestro(mes) ? mes : reducir(mes);
+    const sumaAnio = anio.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+    const anioVal = esNumeroMaestro(sumaAnio) ? sumaAnio : reducir(sumaAnio);
+    const sumaTotal = (typeof diaVal === "number" ? diaVal : parseInt(diaVal)) + 
+                      (typeof mesVal === "number" ? mesVal : parseInt(mesVal)) + 
+                      sumaAnio;
+    const totalVal = esNumeroMaestro(sumaTotal) ? sumaTotal : reducir(sumaTotal);
+
+    const codigoFinal = `Q0-GK-ON-11-${diaVal}${mesVal}${totalVal}${anioVal}`;
+
+    document.getElementById("formBox").classList.add("hidden");
+    document.getElementById("resultadoBox").classList.remove("hidden");
+    document.getElementById("codigoResultado").textContent = codigoFinal;
+
+    guardarEnGoogleSheets(nombre, fecha, codigo, codigoFinal);
+  } else {
+    mensaje.textContent = "Código de desbloqueo no reconocido.";
+  }
+});
+
+function reiniciarFormulario() {
+  document.getElementById("formBox").classList.remove("hidden");
+  document.getElementById("resultadoBox").classList.add("hidden");
+  document.getElementById("nombre").value = "";
+  document.getElementById("fecha").value = "";
+  document.getElementById("codigo").value = "";
+  document.getElementById("mensaje").textContent = "";
+}
+</script>
+
+</body>
+</html>
